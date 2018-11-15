@@ -1,5 +1,6 @@
 # Week 13 Outline
 
+##### Plotting with `matplotlib` and numerical functionality of `numpy`.
 
 ## Plotting
 
@@ -229,7 +230,7 @@
 - The data don't obviously come from a standard distribution, so it's difficult to know how confident we should be in our estimate of the mean. Bootstrapping is one way around this. We can draw a series of samples with replacement from our data and calculate their means. This collection of means gives us an idea of how confident we can be in our estimate.
 
         # Number of bootstrap replicates - more is better, but takes longer
-        bootNumber = 100
+        bootNumber = 1000
 
         # array to store results of bootstrapping
         meanBoots = np.array([])
@@ -247,33 +248,91 @@
         plt.hist(meanBoots)
         plt.show()
 
-        # Sort the bootstrapped means
+- If the number of bootstrap replicates is reasonably large, the distribution of bootstrap means should look roughly Normal (bell-shaped), even though our "data" are _very_ non-Normal. This phenomenon is explained by the [Central Limit Theorem](https://en.wikipedia.org/wiki/Central_limit_theorem).
+
+- While visually inspecting the distribution of bootstrap means is useful, we'd also like to get a quantitative estimate of our uncertainty. To do this, we can generate an estimate of a confidence interval, typically a 95% confidence interval. This interval tells us that if we were to re-sample from our population many times, the means from these samples would fall in this interval 95% of the time.
+
+        # First, we need to sort the means from our bootstrap replicates so that
+        # the smallest values are at the beginning and the largest values are at
+        # the end.
+
         meanBoots = np.sort(meanBoots)
 
-        # We often use the 95% confidence interval as a measure of uncertainty
+        # Find the values in our sorted list that exclude the lowest 2.5% and the highest 2.5% (for a total of 5%).
+        # This code looks a bit intimidating, but let's take a closer look:
+        # bootNumber*0.025 - Calculate the value corresponding to 2.5% of our bootstrap replicates.
+        # np.floor() - Take the number from above and round down.
+        # np.int() - Take the rounded number and convert it from a float to an int.
+        # meanBoots[] - Use that int to find the appropriate value from the set of bootstrap means.
 
-### Probability Distributions
+        confInterval_95 = (meanBoots[np.int(np.floor(bootNumber*0.025))],meanBoots[-1*np.int(np.floor(bootNumber*0.025))])
 
-#### Discrete Distributions
+- Ok, here's a similar dataset that's 10x as big as the first one. Estimate a bootstrap confidence interval for this dataset and see how it compares.
 
-- Discrete Uniform
-
-- Bernoulli
-
-- Binomial
-
-- Poisson
-
-- Geometric
-
-#### Continuous Distributions
-
--
-
-#### Distribution Resources
-
-- [Seeing Theory - Probability Distributions](https://seeing-theory.brown.edu/probability-distributions/index.html)
-- [Wikipedia - Bernoulli](https://en.wikipedia.org/wiki/Bernoulli_distribution)
-- [Wikipedia - Binomial](https://en.wikipedia.org/wiki/Binomial_distribution)
-- [Wikipedia - Poisson](https://en.wikipedia.org/wiki/Poisson_distribution)
-- [Wikipedia - Geometric](https://en.wikipedia.org/wiki/Geometric_distribution)
+bigData = np. array([  4.43916145e-01,   9.79508118e-01,   1.55889064e-01,
+                       8.12968915e-01,   9.40903388e-01,   8.25403668e-01,
+                       9.05186425e-01,   5.31823942e-01,   6.97253335e-02,
+                       5.68562579e-01,   9.98353836e-01,   9.65390694e-01,
+                       3.25003333e-02,   1.60461982e-02,   5.90021669e-01,
+                       9.91478219e-01,   9.99995554e-01,   8.34818349e-01,
+                       2.32329999e-01,   3.14276138e-01,   9.91165289e-01,
+                       2.82183381e-01,   9.99528439e-01,   9.99348785e-01,
+                       2.88281673e-01,   4.78383293e-02,   2.64463949e-02,
+                       1.05601730e-01,   5.01204150e-01,   4.02865627e-01,
+                       9.40431746e-01,   9.99984702e-01,   9.93685144e-01,
+                       9.72354842e-01,   4.81530907e-01,   5.85902306e-01,
+                       9.77466650e-01,   9.91940398e-01,   9.45839706e-01,
+                       4.83826810e-01,   7.35641408e-01,   9.99999178e-01,
+                       7.49026507e-01,   1.41951172e-01,   9.95191929e-01,
+                       9.59170673e-01,   9.99973726e-01,   9.84827026e-01,
+                       6.15954796e-03,   2.13938395e-01,   9.99983405e-01,
+                       2.23600231e-01,   4.62689186e-03,   9.78762820e-01,
+                       9.47722497e-03,   2.99886037e-03,   7.76948811e-01,
+                       9.71141767e-01,   1.89345673e-01,   9.99011748e-01,
+                       9.99960501e-01,   9.91306150e-01,   5.87503957e-01,
+                       3.72923339e-01,   9.97353144e-01,   2.39760063e-02,
+                       9.47302543e-01,   9.99407204e-01,   8.75762742e-01,
+                       3.50833284e-01,   9.00166070e-01,   7.47229948e-01,
+                       9.82860841e-01,   5.31726216e-01,   4.96990082e-01,
+                       8.14009214e-02,   7.41329364e-02,   9.06052786e-01,
+                       9.94765084e-01,   5.16281555e-01,   4.12539687e-01,
+                       2.80712864e-01,   9.98294713e-01,   2.57042242e-01,
+                       7.69605838e-01,   6.93744267e-01,   8.05010371e-02,
+                       7.39394253e-01,   7.72264097e-01,   9.95796109e-01,
+                       9.52355244e-01,   5.70491625e-02,   9.53184390e-01,
+                       9.76624195e-01,   7.48503624e-01,   5.93468779e-01,
+                       8.21453632e-01,   3.80685289e-01,   3.70567641e-01,
+                       8.82285740e-01,   1.11559343e-01,   9.94547968e-01,
+                       9.99984325e-01,   8.36954301e-01,   9.99349401e-01,
+                       9.97728378e-01,   7.85442833e-01,   8.43647238e-01,
+                       9.99999995e-01,   9.99438025e-01,   2.84201700e-01,
+                       9.86931089e-01,   1.10653055e-01,   9.34485365e-01,
+                       9.99667966e-01,   2.24889351e-01,   3.67507765e-02,
+                       9.99976347e-01,   2.54474090e-01,   8.70004892e-01,
+                       7.94592422e-02,   7.45083565e-01,   1.17011723e-01,
+                       6.71071293e-01,   9.22324095e-01,   1.84300134e-02,
+                       1.34330579e-01,   9.98649102e-01,   3.13750127e-02,
+                       9.85101141e-01,   7.92027220e-02,   1.19253219e-01,
+                       9.95017422e-01,   1.36305372e-01,   1.47265279e-02,
+                       5.77995717e-01,   8.60895269e-01,   4.20207824e-01,
+                       6.45650066e-01,   9.99964337e-01,   9.08686187e-01,
+                       4.64678083e-02,   3.62104537e-01,   1.79003729e-02,
+                       4.43108085e-01,   3.25369371e-01,   8.35032692e-01,
+                       4.11413844e-01,   4.30082001e-01,   8.61812507e-01,
+                       9.99592911e-01,   7.23206231e-01,   9.72971197e-01,
+                       9.40323368e-01,   9.91770643e-01,   9.98079598e-01,
+                       3.99557117e-01,   9.76504268e-01,   1.09519946e-05,
+                       9.68713617e-01,   9.12709727e-01,   9.43075658e-01,
+                       1.01931539e-01,   5.97167579e-04,   5.09379061e-02,
+                       2.27517938e-01,   1.35128089e-01,   8.01243513e-01,
+                       9.95445201e-01,   6.48027461e-01,   8.68050299e-01,
+                       9.99990707e-01,   9.98065105e-01,   4.88803544e-02,
+                       9.95784501e-01,   1.90950945e-01,   7.77998449e-02,
+                       9.96819921e-01,   1.02749474e-01,   9.73309097e-01,
+                       9.51092346e-01,   5.96272519e-01,   8.74382355e-01,
+                       9.84488061e-01,   2.36875593e-01,   9.65365939e-01,
+                       9.18195078e-01,   9.97692900e-01,   9.73600579e-01,
+                       2.10149361e-01,   1.51508937e-03,   9.57615474e-01,
+                       6.13810640e-01,   8.19255768e-01,   9.93310944e-01,
+                       9.92655501e-01,   9.94268680e-01,   9.88436729e-01,
+                       9.72657802e-01,   8.33891126e-01])
