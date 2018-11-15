@@ -77,17 +77,151 @@
         Pick two plot types from this gallery, figure out how to plot them, and
         create a figure with both plots on it.
 
+## Matplotlib Resources
+
+- [Real Python - Matplotlib Guide](https://realpython.com/python-matplotlib-guide/)
+
+- [Official Matplotlib Information](https://matplotlib.org)
+
+- [Nicolas Rougier's Matplotlib Tutorial](https://www.labri.fr/perso/nrougier/teaching/matplotlib/)
+
 
 ## Weekly Assignment
 
-- Use `matplotlib` to create some plot that we did not cover in class.
-  - Try to find a plot that will be relevant to your final project.
+        - Use `matplotlib` to create some plot that we did not cover in class.
+          - Try to find a plot that will be relevant to your final project.
 
-- Create a pseudocode outline for the overall structure of your final project.
+        - Create a pseudocode outline for the overall structure of your final project.
 
-- Start filling out as much code as possible under your pseudocode outline. Flag areas where you are stuck or aren't quite sure how to proceed.
+        - Start filling out as much code as possible under your pseudocode outline. Flag areas where you are stuck or aren't quite sure how to proceed.
 
 
-## Resources
+## NumPy Arrays
 
-- [Real Python - Matplotlib Guide](https://realpython.com/python-matplotlib-guide/)
+- Numpy arrays are specialized data structures for storing and manipulating multi-dimensional sets of values. Note that we've done some simples versions of this with lists of lists, but these lack any associated methods.
+
+- Here's how we stored a 2-dimensional array using just standard Python lists
+
+        myBasicArray = [[3,5,8],[9,12,14]]
+
+- Here's the syntax to access the number in "row 2, column 2"
+
+        myBasicArray[1][1]
+
+- Here's our list-of-lists array printed to screen
+
+        print(myBasicArray)
+
+- However, if we want to do anything other than access or change these values, we would need to write custom functions to do so.
+
+- Here's how we could store these same values as a numpy array. Remember that we still need to precede numpy functions with `np`. Note that the `array()` function requires a _single_ list as an argument.
+
+        import numpy as np
+        myArray = np.array([[3,5,8],[9,12,14]])
+
+- We start to notice differences from lists of lists as soon as we print our array.
+
+        print(myArray)
+
+- Conveniently, numpy prints out the array in a matrix-like way.
+
+- There are some built-in functions to create numpy arrays with either all 0s or all 1s, or a range of values.
+
+        myAllZeroArray = np.zeros( (3,5) )
+        print(myAllZeroArray)
+
+        myAllOneArray = np.ones( (5,3) )
+        print(myAllOneArray)
+
+        myRangeArray = np.linspace(2,11.5,20)
+        print(myRangeArray)
+
+        # linspace gives a specified number of values in the given interval
+
+- Now, let's say that we want to turn our one-dimensional array into an multi-dimensional array. Conveniently, numpy arrays have a built-in function to do this - called reshape().
+
+        myRangeArray = myRangeArray.reshape( 2,10 )
+        print( myRangeArray )
+        myRangeArray = myRangeArray.reshape( 4,5 )
+        print( myRangeArray )
+
+- Multi-dimensional arrays can also easily be transformed. For instance, let's say we want to flip an array along its left-to-right axis.
+
+        myRangeArray = np.fliplr(myRangeArray)
+        print( myRangeArray )
+
+- The power of numpy arrays becomes immediately apparent if we want to transform all the values in our array in some way. For instance, let's say we want to subtract a constant value from every element. All we have to do is write the operation with the array.
+
+        print( myRangeArray-1 )
+        print( myRangeArray*2 )
+        print( myRangeArray**2 )
+
+- These operations would not be possible as written with our basic list-of-lists array.
+
+        myBasicArray-1  # Fail
+
+- You can also evaluate boolean statements on all elements in an array.
+
+        print( myRangeArray % 2 == 0 )  # Find even numbers
+
+- Built-in functions are also available that operate on all elements of an array.
+
+        print( myRangeArray.sum() )
+        print( myRangeArray.min() )
+
+- Array axes can be indexed independently to extract particular sets of values. For instance, let's say we want all values in the 3rd column.
+
+        print( myRangeArray[ : , 2] )
+
+- Multiple numpy arrays can be combined in different ways. For instance, if we wanted to stack arrays on top of one another, we can use the vstack() function.
+
+        print( np.vstack( (myAllZeroArray,myAllOneArray.reshape(3,5)) ) )
+
+## Drawing random numbers with NumPy
+
+### Bootstrapping
+
+- One of the simplest and most useful things we can do with (pseudo-)random numbers is draw values from a dataset.
+
+- We can draw these values in two ways - with or without replacement. If we sample _without_ replacement, we are just reordering the dataset. Each time we sample a value, we cannot sample it again.
+
+        data = np.array([ 0.82803637,  0.00382416,  0.07481507,  0.99684717,  0.99995017,
+                          0.63965781,  0.99360978,  0.3625829 ,  0.99999972,  0.98201947,
+                          0.00118308,  0.52392163,  0.95489943,  0.45001676,  0.65437422,
+                          0.94684642,  0.0114679 ,  0.94362976,  0.0704053 ,  0.27266416])
+        data = np.random.choice(data, size=20, replace=False)
+        print(data)
+        data = np.random.choice(data, size=20, replace=False)
+        print(data)
+
+        # In these cases, each value in the original dataset is only present
+        # once in the resampled datasets.
+
+- When we sample _with_ replacement, some values may be sampled multiple times and others sampled not at all. Replacement means that when we sample a value, we put it back into the pool with the potential to be sampled again.
+
+        print( np.random.choice(np.array([1,2,3,4,5]), size=5, replace=True) )
+        print( np.random.choice(np.array([1,2,3,4,5]), size=5, replace=True) )
+        print( np.random.choice(np.array([1,2,3,4,5]), size=5, replace=True) )
+        print( np.random.choice(np.array([1,2,3,4,5]), size=5, replace=True) )
+        print( np.random.choice(np.array([1,2,3,4,5]), size=5, replace=True) )
+
+- One application of sampling with replacement is a procedure called "bootstrapping". The name comes from the phrase "pull yourself up by your bootstraps" and applies when we are trying to learn something about data drawn from an unknown distribution. To start, let's take a look at our data...
+
+        import matplotlib.pyplot as plt
+        plt.hist(data)
+        plt.show()
+
+- Now, let's say we're interested in learning about the mean of the population from which we've sampled these values
+
+        dataMean = np.mean(data)
+        print( dataMean )
+
+- The data don't obviously come from a standard distribution, so it's difficult to know how confident we should be in our estimate of the mean. Bootstrapping is one way around this. We can draw a series of samples with replacement from our data and calculate their means. This collection of means gives us an idea of how confident we can be in our estimate.
+
+        bootNumber = 100
+        meanBoots = np.array([])
+        for _ in range(bootNumber):
+            samp = np.random.choice(data, size=data.size, replace=True)
+            meanBoots = np.append(meanBoots,np.mean(samp))
+        plt.hist(meanBoots)
+        plt.show()
