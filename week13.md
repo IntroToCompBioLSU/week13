@@ -179,6 +179,16 @@
 
 ## Drawing random numbers with NumPy
 
+### Populations and Samples
+
+- [Populations versus Samples - 365 Data Science - YouTube](https://www.youtube.com/watch?v=eIZD1BFfw8E)
+
+- A _population_ consists of all members of a given set (e.g., all LSU students). We often want to understand something about a population (e.g., amount of student debt), but it can be very difficult (impossible) and time consuming to get this information from everyone. Instead, we take a _sample_ from this population, calculate the _statistic_ of interest for the sample, and use it to try and understand the population as a whole.
+
+- Ideally, the _sample_ is randomly drawn from the entire population. The more members of the population are included in the sample, the more confident we can be that our _sample statistic_ accurately reflects the entire population. But just how much uncertainty is there in our estimate for a given sample size? This is a fundamental question in the field of statistics.
+
+- If we know that the quantity of interest in the population has a certain distribution (e.g., Normal), we can sometimes just apply a known formula to tell us how confident we should be. But when the underlying distribution in the population is unknown, we rely on a procedure called _bootstrapping_.
+
 ### Bootstrapping
 
 - One of the simplest and most useful things we can do with (pseudo-)random numbers is draw values from a dataset.
@@ -218,10 +228,52 @@
 
 - The data don't obviously come from a standard distribution, so it's difficult to know how confident we should be in our estimate of the mean. Bootstrapping is one way around this. We can draw a series of samples with replacement from our data and calculate their means. This collection of means gives us an idea of how confident we can be in our estimate.
 
+        # Number of bootstrap replicates - more is better, but takes longer
         bootNumber = 100
+
+        # array to store results of bootstrapping
         meanBoots = np.array([])
+
+        # For loop to perform bootstrapping
         for _ in range(bootNumber):
+
+            # Draw new bootstrap replicate
             samp = np.random.choice(data, size=data.size, replace=True)
+
+            # Calculate mean from each replicate
             meanBoots = np.append(meanBoots,np.mean(samp))
+
+        # Examine bootstrap distribution on the mean
         plt.hist(meanBoots)
         plt.show()
+
+        # Sort the bootstrapped means
+        meanBoots = np.sort(meanBoots)
+
+        # We often use the 95% confidence interval as a measure of uncertainty
+
+### Probability Distributions
+
+#### Discrete Distributions
+
+- Discrete Uniform
+
+- Bernoulli
+
+- Binomial
+
+- Poisson
+
+- Geometric
+
+#### Continuous Distributions
+
+-
+
+#### Distribution Resources
+
+- [Seeing Theory - Probability Distributions](https://seeing-theory.brown.edu/probability-distributions/index.html)
+- [Wikipedia - Bernoulli](https://en.wikipedia.org/wiki/Bernoulli_distribution)
+- [Wikipedia - Binomial](https://en.wikipedia.org/wiki/Binomial_distribution)
+- [Wikipedia - Poisson](https://en.wikipedia.org/wiki/Poisson_distribution)
+- [Wikipedia - Geometric](https://en.wikipedia.org/wiki/Geometric_distribution)
