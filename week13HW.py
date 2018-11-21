@@ -8,7 +8,7 @@ import numpy as np
 #Weekly Income based on education for people age 25 and older
 Education = ('Doctoral degree', 'Professional degree', 'Masters degree', 'Bachelors degree', 'Associates degree', 'some college, no degree', 'high school diploma, no college')
 y_pos = np.arange(len(Education))
-Income = 3 + 10 * np.random.rand(len(Education))
+Income = (plt.xticks([$712, $744, $836, $1173, $1401, $1836, $1743]))
 
 ax.barh(y_pos, Income, align='center', color='green')
 
