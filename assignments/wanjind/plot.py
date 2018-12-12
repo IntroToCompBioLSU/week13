@@ -19,3 +19,5 @@ ax.set_ylabel('Number of cells')
 ax.set_xlabel('Number of cell divisions')
 ax.legend(loc='upper left')
 plt.show()
+
+# DB: Good!
