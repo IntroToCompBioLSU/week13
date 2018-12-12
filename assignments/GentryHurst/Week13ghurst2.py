@@ -23,3 +23,5 @@ p1[2].set_color('chartreuse')
 p1[3].set_color('salmon')
 #prints plot to screen
 plt.show()
+
+# DB: Good!
