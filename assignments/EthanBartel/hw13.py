@@ -13,3 +13,5 @@ plt.ylabel('Percentage')
 plt.title('Grades for Fall 2019 Semester')
  
 plt.show()
+
+# DB: Good!
