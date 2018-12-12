@@ -17,3 +17,5 @@ plt.setp(l, markersize=10) #size of points
 plt.setp(l, markerfacecolor='C0') #color of points
 
 plt.show()
+
+# DB: Good!
